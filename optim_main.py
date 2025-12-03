@@ -47,6 +47,8 @@ def generar_filas(fake: Faker, n: int, null_prob: float):
 
 
 def main() -> None:
+    
+    inicio = time.perf_counter()
     fake = Faker('es_ES')
     null_prob = 0.1
 
@@ -141,7 +143,9 @@ def main() -> None:
                     ),
                     bloque,
                 )
-
+        fin = time.perf_counter()
+        segundos = fin - inicio
+        print(f"Tiempo de ejecución: {segundos:.2f} segundos")
     print("CSV generado e insertado en la base de datos.")
 
 
