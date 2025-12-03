@@ -1,3 +1,4 @@
+import time
 import random 
 import csv
 import os
@@ -21,6 +22,7 @@ def ensure_database(db_url: str) -> None:
 
 
 def main() -> None:
+    inicio = time.perf_counter()
     fake = Faker('es_ES')
     null_prob = 0.1
     rows = [{
@@ -68,6 +70,9 @@ def main() -> None:
             text("INSERT INTO personas_juan_pablo_munoz (nombre, email, direccion, telefono, fecha_nacimiento, cedula, fecha_registro, fecha_pago) VALUES (:nombre, :email, :direccion, :telefono, :fecha_nacimiento, :cedula, :fecha_registro, :fecha_pago)"),
             rows,
         )
+        fin = time.perf_counter()
+        segundos = fin - inicio
+        print(f"Tiempo de ejecución: {segundos:.2f} segundos")
     print("CSV generado e insertado en la base de datos.")
 
 
