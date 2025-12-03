@@ -32,7 +32,7 @@ def main() -> None:
         "cedula": fake.ssn(),              
         "fecha_registro": fake.date_between(start_date='-5y', end_date='today'),
         "fecha_pago": fake.date_between(start_date='-1y', end_date='today') if random.random() > null_prob else None
-    } for _ in range(1000)]
+    } for _ in range(100000)]
 
 
     with open("datos_falsos.csv", "w", newline="", encoding="utf-8") as f:
@@ -51,7 +51,7 @@ def main() -> None:
     with engine.begin() as conn:
         conn.execute(text(
             """
-            CREATE TABLE IF NOT EXISTS datos_falsos (
+            CREATE TABLE IF NOT EXISTS personas_juan_pablo_munoz(
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 nombre VARCHAR(255) NOT NULL,
                 email VARCHAR(255) NOT NULL,
@@ -65,7 +65,7 @@ def main() -> None:
             """
         ))
         conn.execute(
-            text("INSERT INTO datos_falsos (nombre, email, direccion, telefono, fecha_nacimiento, cedula, fecha_registro, fecha_pago) VALUES (:nombre, :email, :direccion, :telefono, :fecha_nacimiento, :cedula, :fecha_registro, :fecha_pago)"),
+            text("INSERT INTO personas_juan_pablo_munoz (nombre, email, direccion, telefono, fecha_nacimiento, cedula, fecha_registro, fecha_pago) VALUES (:nombre, :email, :direccion, :telefono, :fecha_nacimiento, :cedula, :fecha_registro, :fecha_pago)"),
             rows,
         )
     print("CSV generado e insertado en la base de datos.")
