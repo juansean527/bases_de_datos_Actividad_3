@@ -35,6 +35,7 @@ def generar_filas(fake: Faker, n: int, null_prob: float):
         yield {
             "nombre": fake.name(),
             "email": fake.email(),
+            "ciudad": fake.city(),
             "direccion": fake.address().replace("\n", ", "),
             "telefono": fake.phone_number() if random.random() > null_prob else None,
             "fecha_nacimiento": fake.date_of_birth(minimum_age=18, maximum_age=80),
@@ -54,14 +55,14 @@ def main() -> None:
     null_prob = 0.1
 
     fieldnames = [
-        "nombre", "email", "direccion", "telefono",
+        "nombre", "email", "ciudad", "direccion", "telefono",
         "fecha_nacimiento", "cedula", "fecha_registro", "fecha_pago"
     ]
 
     # 1) Generar y escribir CSV por bloques
     gen = generar_filas(fake, N_ROWS, null_prob)
 
-    with open("datos_falsos.csv", "w", newline="", encoding="utf-8") as f:
+    with open("datos_optim_bd.csv", "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
 
@@ -90,6 +91,7 @@ def main() -> None:
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 nombre VARCHAR(255) NOT NULL,
                 email VARCHAR(255) NOT NULL,
+                ciudad VARCHAR(80) NOT NULL,
                 direccion TEXT NOT NULL,
                 telefono VARCHAR(50) DEFAULT NULL,
                 fecha_nacimiento DATE NOT NULL,
@@ -100,13 +102,14 @@ def main() -> None:
             """
         ))
 
-        with open("datos_falsos.csv", newline="", encoding="utf-8") as f:
+        with open("datos_optim_bd.csv", newline="", encoding="utf-8") as f:
             reader = csv.DictReader(f)
             bloque = []
             for row in reader:
                 bloque.append({
                     "nombre": row["nombre"],
                     "email": row["email"],
+                    "ciudad": row["ciudad"],
                     "direccion": row["direccion"],
                     "telefono": row["telefono"],          # puede ser '' → MySQL lo interpreta según config
                     "fecha_nacimiento": row["fecha_nacimiento"],
@@ -119,10 +122,10 @@ def main() -> None:
                         text(
                             """
                             INSERT INTO personas_juan_pablo_munoz_2
-                            (nombre, email, direccion, telefono,
+                            (nombre, email, ciudad, direccion, telefono,
                              fecha_nacimiento, cedula, fecha_registro, fecha_pago)
                             VALUES
-                            (:nombre, :email, :direccion, :telefono,
+                            (:nombre, :email, :ciudad, :direccion, :telefono,
                              :fecha_nacimiento, :cedula, :fecha_registro, :fecha_pago)
                             """
                         ),
@@ -135,10 +138,10 @@ def main() -> None:
                     text(
                         """
                         INSERT INTO personas_juan_pablo_munoz_2
-                        (nombre, email, direccion, telefono,
+                        (nombre, email, ciudad, direccion, telefono,
                          fecha_nacimiento, cedula, fecha_registro, fecha_pago)
                         VALUES
-                        (:nombre, :email, :direccion, :telefono,
+                        (:nombre, :email, :ciudad, :direccion, :telefono,
                          :fecha_nacimiento, :cedula, :fecha_registro, :fecha_pago)
                         """
                     ),

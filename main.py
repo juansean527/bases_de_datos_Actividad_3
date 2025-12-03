@@ -28,6 +28,7 @@ def main() -> None:
     rows = [{
         "nombre": fake.name(),
         "email": fake.email(),
+        "ciudad": fake.city(),
         "direccion": fake.address().replace("\n", ", "),
         "telefono": fake.phone_number() if random.random() > null_prob else None,
         "fecha_nacimiento": fake.date_of_birth(minimum_age=18, maximum_age=80),
@@ -37,8 +38,8 @@ def main() -> None:
     } for _ in range(100000)]
 
 
-    with open("datos_falsos.csv", "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=["nombre", "email", "direccion", "telefono", "fecha_nacimiento", "cedula", "fecha_registro", "fecha_pago"])
+    with open("datos_bd.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=["nombre", "email", "ciudad", "direccion", "telefono", "fecha_nacimiento", "cedula", "fecha_registro", "fecha_pago"])
         w.writeheader()
         w.writerows(rows)
 
@@ -55,8 +56,9 @@ def main() -> None:
             """
             CREATE TABLE IF NOT EXISTS personas_juan_pablo_munoz(
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                nombre VARCHAR(255) NOT NULL,
-                email VARCHAR(255) NOT NULL,
+                nombre VARCHAR(80) NOT NULL,
+                email VARCHAR(80) NOT NULL,
+                ciudad VARCHAR(80) NOT NULL,
                 direccion TEXT NOT NULL,
                 telefono VARCHAR(50) DEFAULT NULL,
                 fecha_nacimiento DATE NOT NULL,
@@ -67,7 +69,7 @@ def main() -> None:
             """
         ))
         conn.execute(
-            text("INSERT INTO personas_juan_pablo_munoz (nombre, email, direccion, telefono, fecha_nacimiento, cedula, fecha_registro, fecha_pago) VALUES (:nombre, :email, :direccion, :telefono, :fecha_nacimiento, :cedula, :fecha_registro, :fecha_pago)"),
+            text("INSERT INTO personas_juan_pablo_munoz (nombre, email, ciudad, direccion, telefono, fecha_nacimiento, cedula, fecha_registro, fecha_pago) VALUES (:nombre, :email, :ciudad, :direccion, :telefono, :fecha_nacimiento, :cedula, :fecha_registro, :fecha_pago)"),
             rows,
         )
         fin = time.perf_counter()
