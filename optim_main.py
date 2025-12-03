@@ -1,3 +1,4 @@
+import time
 import random
 import csv
 import os
@@ -6,8 +7,8 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.engine.url import make_url
 from dotenv import load_dotenv
 
-N_ROWS = 100_000      # cámbialo fácil aquí
-CHUNK  = 5_000        # tamaño de bloque para CSV y BD
+N_ROWS = 100000      # cámbialo fácil aquí
+CHUNK  = 5000        # tamaño de bloque para CSV y BD
 
 
 def ensure_database(db_url: str) -> None:
@@ -85,7 +86,7 @@ def main() -> None:
     with engine.begin() as conn:
         conn.execute(text(
             """
-            CREATE TABLE IF NOT EXISTS datos_falsos (
+           CREATE TABLE IF NOT EXISTS personas_juan_pablo_munoz_2(
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 nombre VARCHAR(255) NOT NULL,
                 email VARCHAR(255) NOT NULL,
@@ -117,7 +118,7 @@ def main() -> None:
                     conn.execute(
                         text(
                             """
-                            INSERT INTO datos_falsos
+                            INSERT INTO personas_juan_pablo_munoz_2
                             (nombre, email, direccion, telefono,
                              fecha_nacimiento, cedula, fecha_registro, fecha_pago)
                             VALUES
@@ -133,7 +134,7 @@ def main() -> None:
                 conn.execute(
                     text(
                         """
-                        INSERT INTO datos_falsos
+                        INSERT INTO personas_juan_pablo_munoz_2
                         (nombre, email, direccion, telefono,
                          fecha_nacimiento, cedula, fecha_registro, fecha_pago)
                         VALUES

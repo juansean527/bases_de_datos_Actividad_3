@@ -58,7 +58,7 @@ def main() -> None:
                 nombre VARCHAR(255) NOT NULL,
                 email VARCHAR(255) NOT NULL,
                 direccion TEXT NOT NULL,
-                telefono VARCHAR(50) NOT NULL,
+                telefono VARCHAR(50) DEFAULT NULL,
                 fecha_nacimiento DATE NOT NULL,
                 cedula VARCHAR(50) NOT NULL,
                 fecha_registro DATE NOT NULL,
