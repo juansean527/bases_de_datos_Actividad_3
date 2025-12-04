@@ -1,4 +1,4 @@
-\.env
+\.venv
 .env
 datos_optim_bd.csv
 datos_bd.csv
